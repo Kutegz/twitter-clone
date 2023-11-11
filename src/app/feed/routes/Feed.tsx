@@ -2,29 +2,22 @@ import '../styles/Feed.css';
 import Post from '../components/Post';
 import { useEffect, useState } from 'react';
 import TweetBox from '../components/TweetBox';
-import { firebaseApp } from '../../../configs/firebase';
+import { firestoreDb } from '../../../configs/firebase';
 import { PostRequest } from '../models/requests/postRequest';
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  Firestore,
-} from 'firebase/firestore/lite';
+import { collection, getDocs } from 'firebase/firestore/lite';
 
 const Feed = () => {
   const [posts, setPosts] = useState<PostRequest[]>([]);
 
   useEffect(() => {
-    const db = getFirestore(firebaseApp);
-
-    async function getPosts(db: Firestore) {
-      const postsCollection = collection(db, 'posts');
+    async function getPosts() {
+      const postsCollection = collection(firestoreDb, 'posts');
       const snapshot = await getDocs(postsCollection);
       const postList = snapshot.docs.map((doc) => doc.data() as PostRequest);
       setPosts(postList);
     }
 
-    getPosts(db);
+    getPosts();
   }, []);
 
   return (

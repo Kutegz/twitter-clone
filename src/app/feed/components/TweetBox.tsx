@@ -2,8 +2,8 @@ import '../styles/TweetBox.css';
 import { MouseEvent, useState } from 'react';
 import { Avatar, Button } from '@mui/material';
 import Logo from '../../../assets/CILLogo.jpg';
-import { firebaseApp } from '../../../configs/firebase';
-import { getFirestore, collection, addDoc } from 'firebase/firestore/lite';
+import { firestoreDb } from '../../../configs/firebase';
+import { collection, addDoc } from 'firebase/firestore/lite';
 
 const TweetBox = () => {
   const [tweetMessage, setTweetMessage] = useState('');
@@ -12,8 +12,7 @@ const TweetBox = () => {
   const sendTweet = async (e: MouseEvent) => {
     e.preventDefault();
 
-    const db = getFirestore(firebaseApp);
-    const postsCollection = collection(db, 'posts');
+    const postsCollection = collection(firestoreDb, 'posts');
 
     const tweet = {
       avatarUrl: 'src/assets/CILLogo.jpg',
@@ -41,6 +40,8 @@ const TweetBox = () => {
           <Avatar src={Logo} alt="Logo" />
           <input
             type="text"
+            id="tweetMessage"
+            name="tweetMessage"
             placeholder="What's happening?"
             value={tweetMessage}
             onChange={(e) => setTweetMessage(e.target.value)}
@@ -48,6 +49,8 @@ const TweetBox = () => {
         </div>
         <input
           type="text"
+          id="tweetImage"
+          name="tweetImage"
           className="tweetBox-imageInput"
           placeholder="Enter image URL"
           value={tweetImage}
